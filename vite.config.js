@@ -4,7 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
+  base: '/alquran-web/',  
+  plugins: [// Ganti dengan nama repo kamu
     tailwindcss(),
     react()
   ],
