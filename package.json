@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss4",
-  "private": false,
+  "private": true,
   "homepage": "https://raehannsz.github.io/alquran-web/",
   "version": "0.0.0",
   "type": "module",
