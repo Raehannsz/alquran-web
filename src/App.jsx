@@ -40,6 +40,13 @@ export default function App() {
     surah.namaLatin.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Scroll to top when a surah is selected
+  useEffect(() => {
+    if (selectedSurah) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedSurah]);
+
   return (
     <div className={`${darkMode ? "dark bg-black text-white" : "bg-white text-black"} min-h-screen`}>
       <Header
@@ -49,30 +56,31 @@ export default function App() {
         setSearchQuery={setSearchQuery}
       />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 min-h-screen">
-        {/* Mobile: hanya tampilkan list atau detail */}
         {isMobile ? (
           showDetailMobile ? (
-            <div className="col-span-1">
+            <div className="col-span-1 relative h-[100vh] overflow-y-auto">
               <button
-                className="mb-4 px-4 py-2 rounded inter-font bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                className="fixed bottom-4 left-4 z-50 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors"
+                style={{ fontSize: "1.5rem" }}
                 onClick={() => setShowDetailMobile(false)}
+                aria-label="Kembali"
               >
-                &larr; Kembali
+                &larr;
               </button>
               <SurahDetail surah={selectedSurah} loading={loadingSurah} />
             </div>
           ) : (
-            <div className="col-span-1">
+            <div className="col-span-1 h-[100vh] overflow-y-auto">
               <SurahList surahs={filteredSurahs} onSelect={loadSurah} />
             </div>
           )
         ) : (
           // Desktop
           <>
-            <div className="h-full overflow-y-auto border-r pr-4">
+            <div className="h-[100vh] overflow-y-auto border-r pr-4">
               <SurahList surahs={filteredSurahs} onSelect={loadSurah} />
             </div>
-            <div className="md:col-span-2 h-full overflow-y-auto p-4">
+            <div className="md:col-span-2 h-[100vh] overflow-y-auto p-4">
               <SurahDetail surah={selectedSurah} loading={loadingSurah} />
             </div>
           </>
