@@ -40,7 +40,7 @@ export default function App() {
     surah.namaLatin.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Scroll to top when a surah is selected
+  // Scroll ke atas jika ada surah yang dibuka
   useEffect(() => {
     if (selectedSurah) {
       window.scrollTo({ top: 0, behavior: "smooth" });
