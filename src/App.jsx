@@ -40,12 +40,31 @@ export default function App() {
     surah.namaLatin.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Scroll to top when a surah is selected
+  // Scroll ke paling atas jika ada surah yang dibuka
   useEffect(() => {
     if (selectedSurah) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
   }, [selectedSurah]);
+
+  // State untuk menyimpan posisi scroll terakhir
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
+  // Simpan posisi scroll sebelum membuka detail surah (mobile)
+  useEffect(() => {
+    if (isMobile && showDetailMobile) {
+      setLastScrollTop(window.scrollY);
+    }
+  }, [showDetailMobile, isMobile]);
+
+  // Kembali ke posisi scroll terakhir saat menutup detail surah (mobile)
+  useEffect(() => {
+    if (isMobile && !showDetailMobile) {
+      window.scrollTo({ top: lastScrollTop, left: 0, behavior: "smooth" });
+    }
+  }, [showDetailMobile, isMobile, lastScrollTop]);
 
   return (
     <div className={`${darkMode ? "dark bg-black text-white" : "bg-white text-black"} min-h-screen`}>
