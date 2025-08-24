@@ -1,6 +1,9 @@
 import { useState } from "react";
 
 export default function SurahDetail({ surah, loading }) {
+  const [fontSize, setFontSize] = useState("medium");
+  const [search, setSearch] = useState("");
+
   if (loading) {
     return <div className="text-gray-500 text-center mt-20 inter-font">Memuat...</div>;
   }
@@ -14,8 +17,6 @@ export default function SurahDetail({ surah, loading }) {
     large: "text-4xl",
   };
 
-  const [fontSize, setFontSize] = useState("medium");
-  const [search, setSearch] = useState("");
   const filteredAyat = surah.ayat.filter(
     (ayat) =>
       ayat.nomorAyat.toString().includes(search) ||
@@ -23,6 +24,15 @@ export default function SurahDetail({ surah, loading }) {
       ayat.teksLatin.toLowerCase().includes(search.toLowerCase()) ||
       ayat.teksIndonesia.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Fungsi untuk menandai (highlight) teks yang cocok dengan pencarian
+  function highlight(text, query) {
+    if (!query) return text;
+    // Escape regex karakter khusus
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escapedQuery, "gi");
+    return text.replace(regex, (match) => `<mark class="bg-yellow-200">${match}</mark>`);
+  }
 
   return (
     <div>
@@ -65,11 +75,31 @@ export default function SurahDetail({ surah, loading }) {
           filteredAyat.map((ayat) => (
             <div key={ayat.nomorAyat} className="border-b border-gray-400 pb-4">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm inter-font">Ayat {ayat.nomorAyat}</span>
+                <span
+                  className="text-sm inter-font"
+                  dangerouslySetInnerHTML={{
+                    __html: highlight(`Ayat ${ayat.nomorAyat}`, search),
+                  }}
+                />
               </div>
-              <div className={`text-right ${fontSizes[fontSize]} arabic-font leading-relaxed`}>{ayat.teksArab}</div>
-              <div className="italic text-gray-600 text-l mt-2 inter-font">{ayat.teksLatin}</div>
-              <div className="text-base mt-1 inter-font"><b>Artinya :</b> {ayat.teksIndonesia}</div>
+              <div
+                className={`text-right ${fontSizes[fontSize]} arabic-font leading-relaxed`}
+                dangerouslySetInnerHTML={{
+                  __html: highlight(ayat.teksArab, search),
+                }}
+              />
+              <div
+                className="italic text-gray-600 text-l mt-2 inter-font"
+                dangerouslySetInnerHTML={{
+                  __html: highlight(ayat.teksLatin, search),
+                }}
+              />
+              <div
+                className="text-base mt-1 inter-font"
+                dangerouslySetInnerHTML={{
+                  __html: `<b>Artinya :</b> ${highlight(ayat.teksIndonesia, search)}`,
+                }}
+              />
             </div>
           ))
         )}
