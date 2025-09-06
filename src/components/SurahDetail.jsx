@@ -49,10 +49,10 @@ export default function SurahDetail({ surah, loading }) {
         </select>
       </div>
       <div className="mb-4">
-        <p className="inter-font text-gray-500 mb-2">Cari ayat (Nomor, Arab, Latin, atau terjemahan)...</p>
         <input
           type="text"
-          className="w-96 px-3 py-2 rounded border border-gray-300 focus:outline-none inter-font"
+          className="w-100 px-3 py-2 rounded border border-gray-300 focus:outline-none inter-font"
+          placeholder="Cari ayat (Nomor, Arab, Latin, atau terjemahan)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
