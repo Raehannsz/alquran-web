@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function SurahDetail({ surah, loading }) {
   const [fontSize, setFontSize] = useState("medium");
   const [search, setSearch] = useState("");
+  const detailRef = useRef(null);
+
+  useEffect(() => {
+    if (surah && detailRef.current) {
+      detailRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [surah]);
 
   if (loading) {
     return <div className="text-gray-500 text-center mt-20 inter-font">Memuat...</div>;
@@ -25,17 +32,15 @@ export default function SurahDetail({ surah, loading }) {
       ayat.teksIndonesia.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Fungsi untuk menandai (highlight) teks yang cocok dengan pencarian
   function highlight(text, query) {
     if (!query) return text;
-    // Escape regex karakter khusus
     const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(escapedQuery, "gi");
     return text.replace(regex, (match) => `<mark class="bg-yellow-200">${match}</mark>`);
   }
 
   return (
-    <div>
+    <div ref={detailRef}>
       <div className="flex items-center mb-4 gap-2">
         <span className="text-m text-gray-600 dark:text-gray-500 inter-font">Ukuran huruf Arab:</span>
         <select
